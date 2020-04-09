@@ -1,0 +1,64 @@
+<template>
+  <div>
+    <span v-for="t in orderedQuads" :key="t.id">
+      <quad-editor v-model="t.quad" />
+    </span>
+    ... quads ...<br/>
+    <button>Add quad</button>
+  </div>
+</template>
+<script lang="ts">
+import { Component, Prop, PropSync, Vue } from "vue-property-decorator";
+import * as Factory from "@rdfjs/data-model";
+import * as Dataset from "@rdfjs/dataset";
+import * as RDF from "rdf-js";
+import QuadEditor from "@/components/QuadEditor.vue";
+
+type QuadHolder = {
+  id: number;
+  quad: RDF.Quad;
+};
+
+let uuid = 0;
+
+@Component({
+  components: { QuadEditor }
+})
+export default class DatasetEditor extends Vue {
+  @Prop() value!: RDF.DatasetCore;
+
+  uuid!: string;
+
+  beforeCreate() {
+    this.uuid = uuid.toString();
+    uuid += 1;
+  }
+
+  get orderedQuads() {
+    let result = new Array<QuadHolder>();
+    let i = 0;
+    let self = this;
+    for (let quad of this.value) {
+      result.push({
+        id: i++,
+        get quad() {
+          return quad;
+        },
+        set quad(q: RDF.Quad) {
+          console.log(self.uuid, "deleting/adding", quad, q);
+          console.log("before",self.value.size , JSON.stringify(self.value));
+          self.value.delete(quad);
+          if (q != null) {
+            self.value.add(q);
+          }
+          quad = q;
+          this.id = (this.id+1)*2;
+          console.log("after",self.value.size , JSON.stringify(self.value));
+          self.$emit("input", Dataset.dataset(self.value));
+        }
+      });
+    }
+    return result;
+  }
+}
+</script>
