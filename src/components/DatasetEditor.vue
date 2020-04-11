@@ -61,10 +61,15 @@ export default class DatasetEditor extends Vue {
     }
     return result.sort((a: QuadHolder, b: QuadHolder) => {
       
-      function first(f: () => number) {
+      interface chainable {
+        then(f: () => number): chainable;
+        finally(t: () => number): number;
+      }
+
+      function first(f: () => number) : chainable {
         const fr = f();
         const result = {
-          then: function(t: () => number) {
+          then: function(t: () => number) : chainable {
             if (fr === 0) {
               return first(t);
             } else {
