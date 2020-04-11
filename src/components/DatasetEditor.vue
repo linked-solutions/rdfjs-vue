@@ -3,7 +3,8 @@
     <span v-for="t in orderedQuads" :key="t.id">
       <quad-editor v-model="t.quad" />
     </span>
-    ... quads ...<br/>
+    ... quads ...
+    <br />
     <button>Add quad</button>
   </div>
 </template>
@@ -45,20 +46,60 @@ export default class DatasetEditor extends Vue {
           return quad;
         },
         set quad(q: RDF.Quad) {
-          console.log(self.uuid, "deleting/adding", quad, q);
-          console.log("before",self.value.size , JSON.stringify(self.value));
+          // console.log(self.uuid, "deleting/adding", quad, q);
+          // console.log("before", self.value.size, JSON.stringify(self.value));
           self.value.delete(quad);
           if (q != null) {
             self.value.add(q);
           }
           quad = q;
-          this.id = (this.id+1)*2;
-          console.log("after",self.value.size , JSON.stringify(self.value));
+          this.id = (this.id + 1) * 2;
+          // console.log("after", self.value.size, JSON.stringify(self.value));
           self.$emit("input", Dataset.dataset(self.value));
         }
       });
     }
-    return result;
+    return result.sort((a: QuadHolder, b: QuadHolder) => {
+      
+      function first(f: () => number) {
+        const fr = f();
+        const result = {
+          then: function(t: () => number) {
+            if (fr === 0) {
+              return first(t);
+            } else {
+              return result;
+            }
+          },
+          finally: function(t: () => number) {
+            if (fr === 0) {
+              return t();
+            } else {
+              return fr;
+            }
+          }
+        }
+        return result;
+      }
+
+      function compare(field: 'graph'|'subject'|'predicate'|'object'): () => number {
+        return () => {
+          if (a.quad[field].value < b.quad[field].value) {
+            return -1;
+          } else {
+            if (a.quad[field].value > b.quad[field].value) {
+              return 1;
+            } else {
+              return 0;
+            }
+          }
+        }
+      }
+      return first(compare('graph'))
+            .then(compare('subject'))
+            .then(compare('predicate'))
+            .finally(compare('object'));
+    });
   }
 }
 </script>
