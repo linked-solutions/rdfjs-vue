@@ -31,77 +31,47 @@ import * as RDF from "rdf-js";
 import TermEditor from "@/components/TermEditor.vue";
 import ExistingTermEditor from "@/components/ExistingTermEditor.vue";
 
+const valueChanged = function(this: QuadEditor, val: RDF.Term) {
+  if (this.subject && this.predicate && this.object && this.graph) {
+    const newQuad = Factory.quad(this.subject, this.predicate, this.object, this.graph);
+    if (!this.value || !newQuad.equals(this.value)) {
+      this.$emit(
+        "input",
+        newQuad
+      );
+    }
+  }
+};
 
 @Component({
   components: {
     TermEditor,
     ExistingTermEditor
+  },
+  watch: {
+    subject: valueChanged,
+    predicate: valueChanged,
+    object: valueChanged,
+    graph: valueChanged
   }
 })
 export default class QuadEditor extends Vue {
   @Prop() value!: RDF.Quad|null;
   @Prop() private labels!: Boolean;
 
-  get subject() {
-    return this.value ? this.value.subject : null;
-  }
-  get predicate() {
-    return this.value ? this.value.predicate : Factory.namedNode("");
-  }
-  get object() {
-    return this.value ? this.value.object : null;
-  }
-  get graph() {
-    return this.value ? this.value.graph : null;
-  }
+  subject: RDF.Quad_Subject|null = this.value ? this.value.subject : null;
+  predicate: RDF.Quad_Predicate = this.value ? this.value.predicate : Factory.namedNode("");
+  object: RDF.Quad_Object|null = this.value ? this.value.object : null;
+  graph: RDF.Quad_Graph|null = this.value ? this.value.graph : null;
 
-  private createQuad(subject: RDF.Quad_Subject|null, 
-        predicate: RDF.Quad_Predicate|null,
-        object: RDF.Quad_Object|null, graph: RDF.Quad_Graph|null) {
-          if ((subject == null)
-            || (predicate == null)
-            || (object == null)
-            || (graph == null)) {
-            return null;
-          } else {
-            return Factory.quad(subject, predicate, object, graph);
-          }
-  }
-
-  set subject(subject: RDF.Quad_Subject|null) {
-    const newQuad = this.createQuad(subject, this.predicate, this.object, this.graph);
-    if (newQuad != null) {
-      this.$emit("input", newQuad);
-      //this.value = newQuad;
-    } else {
-      this.value = null;
+  @Watch('value')
+  onValueChanged(newQ: RDF.Quad) {
+    if (newQ !== null) {
+      this.subject = newQ.subject;
+      this.predicate = newQ.predicate;
+      this.object = newQ.object;
+      this.graph = newQ.graph;
     }
   }
-  set predicate(predicate: RDF.Quad_Predicate|null) {
-    const newQuad = this.createQuad(this.subject, predicate, this.object, this.graph);
-    if (newQuad != null) {
-      this.$emit("input", newQuad);
-      //this.value = newQuad;
-    }
-  }
-  set object(object: RDF.Quad_Object|null) {
-    const newQuad = this.createQuad(this.subject, this.predicate, object, this.graph);
-    if (newQuad != null) {
-      this.$emit("input", newQuad);
-      //this.value = newQuad;
-    }
-  }
-  set graph(graph: RDF.Quad_Graph|null) {
-    const newQuad = this.createQuad(this.subject, this.predicate, this.object, graph);
-    if (newQuad != null) {
-      this.$emit("input", newQuad);
-      //this.value = newQuad;
-    }
-  }
-
-  mounted() {
-    console.log('mounted', this.subject, this.predicate, this.object, this.graph);
-  }
-
 }
 </script>
