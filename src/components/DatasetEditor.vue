@@ -16,7 +16,7 @@ import * as RDF from "rdf-js";
 import QuadEditor from "@/components/QuadEditor.vue";
 
 type QuadHolder = {
-  id: number;
+  id: any;
   quad: RDF.Quad;
 };
 
@@ -41,26 +41,24 @@ export default class DatasetEditor extends Vue {
     let self = this;
     for (let quad of this.value) {
       result.push({
-        id: i++,
+        id: "",
         get quad() {
           return quad;
         },
         set quad(q: RDF.Quad) {
-          // console.log(self.uuid, "deleting/adding", quad, q);
-          // console.log("before", self.value.size, JSON.stringify(self.value));
+          //console.log(self.uuid, "deleting/adding", JSON.stringify(quad), JSON.stringify(q));
           self.value.delete(quad);
           if (q != null) {
             self.value.add(q);
+          } else {
+            console.log("removing quad")
           }
           quad = q;
-          this.id = (this.id + 1) * 2;
-          // console.log("after", self.value.size, JSON.stringify(self.value));
           self.$emit("input", Dataset.dataset(self.value));
         }
       });
     }
-    return result.sort((a: QuadHolder, b: QuadHolder) => {
-      
+    const sorted = result.sort((a: QuadHolder, b: QuadHolder) => {
       interface chainable {
         then(f: () => number): chainable;
         finally(t: () => number): number;
@@ -105,6 +103,12 @@ export default class DatasetEditor extends Vue {
             .then(compare('predicate'))
             .finally(compare('object'));
     });
+    let j = 0;
+    sorted.forEach(holder => {
+      holder.id = self.uuid+"-"+j++;
+    });
+    //console.log(self.uuid, "sorted", JSON.stringify(sorted));
+    return sorted;
   }
 }
 </script>
