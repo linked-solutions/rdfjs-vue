@@ -41,20 +41,18 @@ export default class DatasetEditor extends Vue {
     let result = new Array<QuadHolder>();
     let i = 0;
     let self = this;
+    const currentHolders: Map<RDF.Quad, QuadHolder> = new Map();
     for (let quad of this.value) {
       console.log(self.uuid, "previousHolders: "+self.previousHolders.size);
       let holder = self.previousHolders.get(quad)
-      if (holder) {
-        result.push(holder);
-        console.log(self.uuid,"reused: "+holder.id);
-      } else {
-        const holder = {
+      if (!holder) {
+        holder = {
           id: "",
           get quad() {
             return quad;
           },
           set quad(q: RDF.Quad) {
-            //console.log(self.uuid, "deleting/adding", JSON.stringify(quad), JSON.stringify(q));
+            console.log(self.uuid, "deleting/adding", JSON.stringify(quad), JSON.stringify(q));
             self.previousHolders.delete(quad);
             self.value.delete(quad);
             if (q != null) {
@@ -67,10 +65,11 @@ export default class DatasetEditor extends Vue {
             self.$emit("input", Dataset.dataset(self.value));
           }
         };
-        self.previousHolders.set(quad, holder);
-        result.push(holder);
       }
+      currentHolders.set(quad, holder);
+      result.push(holder);
     }
+    self.previousHolders = currentHolders;
     const sorted = result.sort((a: QuadHolder, b: QuadHolder) => {
       interface chainable {
         then(f: () => number): chainable;
