@@ -35,29 +35,41 @@ export default class DatasetEditor extends Vue {
     uuid += 1;
   }
 
+  previousHolders: Map<RDF.Quad, QuadHolder> = new Map();
+
   get orderedQuads() {
     let result = new Array<QuadHolder>();
     let i = 0;
     let self = this;
+    const currentHolders: Map<RDF.Quad, QuadHolder> = new Map();
     for (let quad of this.value) {
-      result.push({
-        id: "",
-        get quad() {
-          return quad;
-        },
-        set quad(q: RDF.Quad) {
-          //console.log(self.uuid, "deleting/adding", JSON.stringify(quad), JSON.stringify(q));
-          self.value.delete(quad);
-          if (q != null) {
-            self.value.add(q);
-          } else {
-            console.log("removing quad")
+      console.log(self.uuid, "previousHolders: "+self.previousHolders.size);
+      let holder = self.previousHolders.get(quad)
+      if (!holder) {
+        holder = {
+          id: "",
+          get quad() {
+            return quad;
+          },
+          set quad(q: RDF.Quad) {
+            console.log(self.uuid, "deleting/adding", JSON.stringify(quad), JSON.stringify(q));
+            self.previousHolders.delete(quad);
+            self.value.delete(quad);
+            if (q != null) {
+              self.value.add(q);
+            } else {
+              console.log("removing quad")
+            }
+            quad = q;
+            self.previousHolders.set(q, this);
+            self.$emit("input", Dataset.dataset(self.value));
           }
-          quad = q;
-          self.$emit("input", Dataset.dataset(self.value));
-        }
-      });
+        };
+      }
+      currentHolders.set(quad, holder);
+      result.push(holder);
     }
+    self.previousHolders = currentHolders;
     const sorted = result.sort((a: QuadHolder, b: QuadHolder) => {
       interface chainable {
         then(f: () => number): chainable;
@@ -103,9 +115,12 @@ export default class DatasetEditor extends Vue {
             .then(compare('predicate'))
             .finally(compare('object'));
     });
-    let j = 0;
+    const max = sorted.reduce((previous, current) => previous.id > current.id ? previous : current);
+    let j = max.id;
     sorted.forEach(holder => {
-      holder.id = self.uuid+"-"+j++;
+      if (!holder.id) {
+        holder.id = ++j;
+      }
     });
     //console.log(self.uuid, "sorted", JSON.stringify(sorted));
     return sorted;
