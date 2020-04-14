@@ -115,7 +115,8 @@ export default class DatasetEditor extends Vue {
             .then(compare('predicate'))
             .finally(compare('object'));
     });
-    const max = sorted.reduce((previous, current) => previous.id > current.id ? previous : current);
+    const zero = {id: 0}
+    const max = sorted.reduce((previous, current) => previous.id > current.id ? previous : current, zero);
     let j = max.id;
     sorted.forEach(holder => {
       if (!holder.id) {

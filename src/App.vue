@@ -2,6 +2,7 @@
     <div id="app">
       <div id="nav">
         <router-link to="/">Editor</router-link> |
+        <router-link to="/dataset-browser-demo">Dataset-Browser-Demo</router-link> |
         <router-link to="/dataset-editor-demo">Dataset-Editor-Demo</router-link> |
         <router-link to="/editor-demo">Editor-Demo</router-link> |
         <router-link to="/about">About</router-link>
