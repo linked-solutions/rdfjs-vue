@@ -4,6 +4,7 @@
     <pre>{{ ds.quads }}</pre>
     <pre>{{ JSON.stringify(ds.quads) }}{{ console.log('d', JSON.stringify(ds)) }}</pre>
     <dataset-editor v-model="ds"/>
+    <h2>The same once more</h2>
     <dataset-editor v-model="ds"/>
   </div>
 </template>

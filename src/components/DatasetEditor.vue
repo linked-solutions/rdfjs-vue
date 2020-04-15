@@ -3,9 +3,12 @@
     <span v-for="t in orderedQuads" :key="t.id">
       <quad-editor v-model="t.quad" />
     </span>
-    ... quads ...
-    <br />
-    <button>Add quad</button>
+    <div v-if="addedQuad">
+      <quad-editor v-model="newQuad" />
+    </div>
+    <div v-else>
+      <button @click="addQuad()">Add quad</button>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -35,6 +38,23 @@ export default class DatasetEditor extends Vue {
     uuid += 1;
   }
 
+  get newQuad() {
+    return null;
+  }
+
+  set newQuad(q: RDF.Quad|null) {
+    if (q) {
+      this.addedQuad = false;
+      this.value.add(q);
+      this.$emit("input", Dataset.dataset(this.value));
+    }
+  }
+
+  addedQuad = false;
+  addQuad() {
+    this.addedQuad = true;
+  }
+
   previousHolders: Map<RDF.Quad, QuadHolder> = new Map();
 
   get orderedQuads() {
@@ -43,7 +63,7 @@ export default class DatasetEditor extends Vue {
     let self = this;
     const currentHolders: Map<RDF.Quad, QuadHolder> = new Map();
     for (let quad of this.value) {
-      console.log(self.uuid, "previousHolders: "+self.previousHolders.size);
+      // console.log(self.uuid, "previousHolders: "+self.previousHolders.size);
       let holder = self.previousHolders.get(quad)
       if (!holder) {
         holder = {
@@ -52,7 +72,7 @@ export default class DatasetEditor extends Vue {
             return quad;
           },
           set quad(q: RDF.Quad) {
-            console.log(self.uuid, "deleting/adding", JSON.stringify(quad), JSON.stringify(q));
+            // console.log(self.uuid, "deleting/adding", JSON.stringify(quad), JSON.stringify(q));
             self.previousHolders.delete(quad);
             self.value.delete(quad);
             if (q != null) {
