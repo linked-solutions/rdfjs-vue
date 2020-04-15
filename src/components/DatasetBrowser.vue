@@ -1,8 +1,23 @@
 <template>
-  <div>
-    <dataset-editor v-model="filtered" />
+  <div class="subject-blocked">
+    <div>{{uri}}</div>
+    <div class="editor">
+      <dataset-editor v-model="filtered" />
+    </div>
   </div>
 </template>
+<style>
+ .subject-blocked .subject {
+   display: none;
+ }
+</style>
+
+<style scoped>
+ .editor {
+   margin-left: 5em;
+ }
+</style>
+
 <script lang="ts">
 import { Component, Prop, PropSync, Vue } from "vue-property-decorator";
 import * as Factory from "@rdfjs/data-model";

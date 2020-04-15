@@ -1,7 +1,9 @@
 <template>
   <div class="g">
+    <span class="subject">
     <label v-if="labels">Subject:</label>
     <term-editor v-model="subject" term-types="['BlankNode', 'NamedNode']" />
+    </span>
     <label v-if="labels">Predicate:</label>
     <existing-term-editor v-model="predicate" term-types="['NamedNode']" />
     <label v-if="labels">Object:</label>
