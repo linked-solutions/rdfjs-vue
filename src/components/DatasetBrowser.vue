@@ -1,6 +1,6 @@
 <template>
   <div class="subject-blocked">
-    <div>{{uri}}</div>
+    <div>{{subject.value}}</div>
     <div class="editor">
       <dataset-editor v-model="filtered" />
     </div>
@@ -33,7 +33,7 @@ let instanceCounter = 0;
 })
 export default class DatasetBrowser extends Vue {
   @Prop() value!: RDF.DatasetCore;
-  @Prop() uri!: string;
+  @Prop() subject: RDF.Quad_Subject|undefined;
 
   uuid!: string;
 
@@ -42,9 +42,18 @@ export default class DatasetBrowser extends Vue {
     instanceCounter++;
   }
 
+  created() {
+    if (this.subject) {
+      if (!this.subject.termType) {
+        //we assume it's a string
+        this.subject = Factory.namedNode(this.subject);
+      }
+      console.log(this.uuid, " create2", this.subject.termType);
+    }
+  }
+
   set filtered(ds: RDF.DatasetCore) {
-    const resource = this.uri ? Factory.namedNode(this.uri) : undefined;
-    const orig: RDF.DatasetCore = this.value.match(resource);
+    const orig: RDF.DatasetCore = this.value.match(this.subject);
     for (let quad of orig) {
       this.value.delete(quad);
     }
@@ -55,8 +64,7 @@ export default class DatasetBrowser extends Vue {
   }
 
   get filtered() {
-    const resource = this.uri ? Factory.namedNode(this.uri) : undefined;
-    return this.value.match(resource);
+    return this.value.match(this.subject);
   }
 }
 </script>
