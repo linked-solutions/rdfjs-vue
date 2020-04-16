@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h1>Browse</h1>
-    <dataset-browser v-model="ds" subject="http://example.org/Bill"/>
+    <dataset-browser v-model="ds" subject="http://example.org/Bill" :graph="defaultGraph" />
     <h1>Full Dataset</h1>
     <dataset-editor v-model="ds" />
   </div>
@@ -30,7 +30,8 @@ export default {
   },
   data: function() {
       return {
-        ds: ds
+        ds: ds,
+        defaultGraph: Factory.defaultGraph()
       }
   }
 }

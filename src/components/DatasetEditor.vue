@@ -57,12 +57,12 @@ export default class DatasetEditor extends Vue {
 
   previousHolders: Map<RDF.Quad, QuadHolder> = new Map();
 
-  get orderedQuads() {
+  orderQuads(quads: RDF.DatasetCore) {
     let result = new Array<QuadHolder>();
     let i = 0;
     let self = this;
     const currentHolders: Map<RDF.Quad, QuadHolder> = new Map();
-    for (let quad of this.value) {
+    for (let quad of quads) {
       // console.log(self.uuid, "previousHolders: "+self.previousHolders.size);
       let holder = self.previousHolders.get(quad)
       if (!holder) {
@@ -145,6 +145,9 @@ export default class DatasetEditor extends Vue {
     });
     //console.log(self.uuid, "sorted", JSON.stringify(sorted));
     return sorted;
+  }
+  get orderedQuads() {
+    return this.orderQuads(this.value);
   }
 }
 </script>

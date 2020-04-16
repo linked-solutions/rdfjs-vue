@@ -1,40 +1,39 @@
 <template>
   <div class="subject-blocked">
     <div>{{_subject.value}}</div>
-    <div class="editor">
-      <dataset-editor v-model="filtered" />
+    <span v-for="t in orderedQuads" :key="t.id">
+      <browser-row v-model="t.quad" :fixedSubject="_subject" :fixedGraph="_graph"/>
+    </span>
+    <div v-if="addedQuad">
+      <browser-row v-model="newQuad" :fixedSubject="_subject" :fixedGraph="_graph"/>
+    </div>
+    <div v-else>
+      <button @click="addQuad()">Add attribute</button>
     </div>
   </div>
 </template>
-<style>
- .subject-blocked .subject {
-   display: none;
- }
-</style>
-
-<style scoped>
- .editor {
-   margin-left: 5em;
- }
-</style>
-
 <script lang="ts">
 import { Component, Prop, PropSync, Vue } from "vue-property-decorator";
 import * as Factory from "@rdfjs/data-model";
 import * as Dataset from "@rdfjs/dataset";
 import * as RDF from "rdf-js";
+import BrowserRow from "@/components/BrowserRow.vue";
 import DatasetEditor from "@/components/DatasetEditor.vue";
 
 
 let instanceCounter = 0;
 
 @Component({
-  components: { DatasetEditor }
+  components: { BrowserRow }
 })
-export default class DatasetBrowser extends Vue {
+export default class DatasetBrowser extends DatasetEditor {
   @Prop() value!: RDF.DatasetCore;
   @Prop() subject: RDF.Quad_Subject|undefined;
-  private _subject: RDF.Quad_Subject|undefined;
+  _subject: RDF.Quad_Subject|undefined;
+  @Prop() object: RDF.Quad_Object|undefined;
+  _object: RDF.Quad_Object|undefined;
+  @Prop() graph: RDF.Quad_Graph|undefined;
+  _graph: RDF.Quad_Graph|undefined;
 
   uuid!: string;
 
@@ -52,21 +51,28 @@ export default class DatasetBrowser extends Vue {
         this._subject = this.subject;
       }
     }
+    if (this.object) {
+      if (!this.object.termType) {
+        //we assume it's a string
+        this._object = Factory.namedNode(this.object);
+      } else {
+        this._object = this.object;
+      }
+    }
+    if (this.graph) {
+      if (!this.graph.termType) {
+        //we assume it's a string
+        this._graph = Factory.namedNode(this.graph);
+      } else {
+        this._graph = this.graph;
+      }
+    }
   }
 
-  set filtered(ds: RDF.DatasetCore) {
-    const orig: RDF.DatasetCore = this.value.match(this._subject);
-    for (let quad of orig) {
-      this.value.delete(quad);
-    }
-    for (let quad of ds) {
-      this.value.add(quad)
-    }
-    this.$emit("input", Dataset.dataset(this.value));
+  get orderedQuads() {
+    const result = this.orderQuads(this.value.match(this._subject));
+    return result;
   }
 
-  get filtered() {
-    return this.value.match(this._subject);
-  }
 }
 </script>
