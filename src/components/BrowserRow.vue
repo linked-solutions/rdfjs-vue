@@ -12,6 +12,8 @@
       v-model="object"
       term-types="['BlankNode', 'NamedNode', 'Literal']"
     />
+    <resource-navigator v-if="!fixedObject && object && (object.termType !== 'Literal')" :resource="object" 
+    @subject="expandAsSuject($event)" />
     <term-editor
       v-if="!fixedGraph"
       v-model="graph"
@@ -39,8 +41,9 @@ import * as Factory from "@rdfjs/data-model";
 import * as RDF from "rdf-js";
 import TermEditor from "@/components/TermEditor.vue";
 import ExistingTermEditor from "@/components/ExistingTermEditor.vue";
+import ResourceNavigator from "@/components/ResourceNavigator.vue";
 
-const valueChanged = function(this: QuadEditor, val: RDF.Term) {
+const valueChanged = function(this: BrowserRow, val: RDF.Term) {
   if (this.subject && this.predicate && this.object && this.graph) {
     const newQuad = Factory.quad(
       this.subject,
@@ -58,7 +61,8 @@ const valueChanged = function(this: QuadEditor, val: RDF.Term) {
 @Component({
   components: {
     TermEditor,
-    ExistingTermEditor
+    ExistingTermEditor,
+    ResourceNavigator
   },
   watch: {
     subject: valueChanged,
@@ -67,7 +71,7 @@ const valueChanged = function(this: QuadEditor, val: RDF.Term) {
     graph: valueChanged
   }
 })
-export default class QuadEditor extends Vue {
+export default class BrowserRow extends Vue {
   @Prop() value!: RDF.Quad | null;
   @Prop() private fixedSubject: RDF.Quad_Subject | undefined;
   @Prop() private fixedObject: RDF.Quad_Object | undefined;
@@ -100,6 +104,10 @@ export default class QuadEditor extends Vue {
       this.object = newQ.object;
       this.graph = newQ.graph;
     }
+  }
+
+  expandAsSuject(event: RDF.Term) {
+    this.$emit("subject", event);
   }
 }
 </script>

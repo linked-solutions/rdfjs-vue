@@ -2,7 +2,7 @@
   <div class="subject-blocked">
     <div>{{_subject.value}}</div>
     <span v-for="t in orderedQuads" :key="t.id">
-      <browser-row v-model="t.quad" :fixedSubject="_subject" :fixedGraph="_graph"/>
+      <browser-row v-model="t.quad" :fixedSubject="_subject" :fixedGraph="_graph" @subject="expandAsSubject($event)"/>
     </span>
     <div v-if="addedQuad">
       <browser-row v-model="newQuad" :fixedSubject="_subject" :fixedGraph="_graph"/>
@@ -72,6 +72,13 @@ export default class DatasetBrowser extends DatasetEditor {
   get orderedQuads() {
     const result = this.orderQuads(this.value.match(this._subject));
     return result;
+  }
+
+  expandAsSubject(subject: RDF.Quad_Subject) {
+    this._object = undefined;
+    this._subject = subject;
+    //enforces update, this.$forceUpdate() didn't refresh quads
+    this.$emit("input", Dataset.dataset(this.value));
   }
 
 }

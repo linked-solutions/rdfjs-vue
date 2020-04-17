@@ -86,10 +86,10 @@ export default class DatasetEditor extends Vue {
           }
         };
       }
-      currentHolders.set(quad, holder);
+      self.previousHolders.set(quad, holder);
       result.push(holder);
     }
-    self.previousHolders = currentHolders;
+    //self.previousHolders = currentHolders;
     const sorted = result.sort((a: QuadHolder, b: QuadHolder) => {
       interface chainable {
         then(f: () => number): chainable;
@@ -140,7 +140,7 @@ export default class DatasetEditor extends Vue {
     let j = max.id;
     sorted.forEach(holder => {
       if (!holder.id) {
-        holder.id = ++j;
+        holder.id = ++j+Math.floor(Math.random() * 10000) ;
       }
     });
     //console.log(self.uuid, "sorted", JSON.stringify(sorted));
