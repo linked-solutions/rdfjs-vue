@@ -20,7 +20,13 @@ const ds: RDF.DatasetCore = Dataset.dataset([Factory.quad(Factory.namedNode("htt
           Factory.namedNode("http://example.org/Berta"), Factory.defaultGraph()),
           Factory.quad(Factory.namedNode("http://example.org/Charlie"), 
           Factory.namedNode("http://example.org/knows"), 
-          Factory.namedNode("http://example.org/Carl"), Factory.defaultGraph())]);
+          Factory.namedNode("http://example.org/Carl"), Factory.defaultGraph()),
+          Factory.quad(Factory.namedNode("http://example.org/Carl"), 
+          Factory.namedNode("http://example.org/admires"), 
+          Factory.namedNode("http://example.org/Bill"), Factory.defaultGraph()),
+          Factory.quad(Factory.namedNode("http://example.org/Berta"), 
+          Factory.namedNode("http://example.org/knows"), 
+          Factory.namedNode("http://example.org/Charlie"), Factory.defaultGraph())]);
 
 export default {
   name: 'DatasetBrowserDemo',
