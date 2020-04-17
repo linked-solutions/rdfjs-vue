@@ -1,11 +1,13 @@
 <template>
-  <div class="subject-blocked">
-    <div>{{_subject.value}}</div>
+  <div>
+    <div v-if="_subject">{{_subject.value}}</div>
+    <div v-if="_object">&lt;-{{_object.value}}</div>
     <span v-for="t in orderedQuads" :key="t.id">
-      <browser-row v-model="t.quad" :fixedSubject="_subject" :fixedGraph="_graph" @subject="expandAsSubject($event)"/>
+      <browser-row v-model="t.quad" :fixedSubject="_subject" :fixedGraph="_graph" :fixedObject="_object"
+      @subject="setSubject($event)" @object="setObject($event)"/>
     </span>
     <div v-if="addedQuad">
-      <browser-row v-model="newQuad" :fixedSubject="_subject" :fixedGraph="_graph"/>
+      <browser-row v-model="newQuad" :fixedSubject="_subject" :fixedGraph="_graph" :fixedObject="_object" />
     </div>
     <div v-else>
       <button @click="addQuad()">Add attribute</button>
@@ -70,13 +72,21 @@ export default class DatasetBrowser extends DatasetEditor {
   }
 
   get orderedQuads() {
-    const result = this.orderQuads(this.value.match(this._subject));
+    const result = this.orderQuads(this.value.match(this._subject, undefined, this._object, this._graph));
     return result;
   }
 
-  expandAsSubject(subject: RDF.Quad_Subject) {
+  setSubject(subject: RDF.Quad_Subject) {
     this._object = undefined;
     this._subject = subject;
+    //enforces update, this.$forceUpdate() didn't refresh quads
+    this.$emit("input", Dataset.dataset(this.value));
+  }
+
+  setObject(object: RDF.Quad_Subject) {
+    console.log("setobj"+object);
+    this._object = object;
+    this._subject = undefined;
     //enforces update, this.$forceUpdate() didn't refresh quads
     this.$emit("input", Dataset.dataset(this.value));
   }

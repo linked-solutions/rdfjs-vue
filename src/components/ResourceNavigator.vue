@@ -1,6 +1,7 @@
 <template>
   <span>
-    <img src="images/subj-expand.svg" title="show properties" @click="setSubject()" /><img src="images/obj-expand.svg" title="show incoming" />
+    <img src="images/subj-expand.svg" title="show properties" @click="setSubject()" />
+    <img src="images/obj-expand.svg" title="show incoming" @click="setObject()"/>
   </span>
 </template>
 
@@ -21,6 +22,10 @@ export default class ResourceNavigator extends Vue {
 
   setSubject() {
     this.$emit("subject", this.resource);
+  }
+
+  setObject() {
+    this.$emit("object", this.resource);
   }
   
 }

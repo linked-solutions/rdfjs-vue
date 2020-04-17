@@ -6,6 +6,8 @@
 <template>
   <div class="g">
     <term-editor v-if="!fixedSubject" v-model="subject" term-types="['BlankNode', 'NamedNode']" />
+    <resource-navigator v-if="!fixedSubject && subject && (subject.termType !== 'Literal')" :resource="subject" 
+    @subject="setSubject($event)" @object="setObject($event)"/>
     <existing-term-editor v-model="predicate" term-types="['NamedNode']" />
     <term-editor
       v-if="!fixedObject"
@@ -13,7 +15,7 @@
       term-types="['BlankNode', 'NamedNode', 'Literal']"
     />
     <resource-navigator v-if="!fixedObject && object && (object.termType !== 'Literal')" :resource="object" 
-    @subject="expandAsSuject($event)" />
+    @subject="setSubject($event)" @object="setObject($event)"/>
     <term-editor
       v-if="!fixedGraph"
       v-model="graph"
@@ -106,8 +108,12 @@ export default class BrowserRow extends Vue {
     }
   }
 
-  expandAsSuject(event: RDF.Term) {
+  setSubject(event: RDF.Term) {
     this.$emit("subject", event);
+  }
+
+  setObject(event: RDF.Term) {
+    this.$emit("object", event);
   }
 }
 </script>
