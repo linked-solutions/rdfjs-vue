@@ -35,7 +35,9 @@ export default Vue.extend({
   },
   mounted: function() {
     // `this` points to the vm instance
-    this.prefixplete = new Prefixplete(this.$el.firstElementChild);
+    this.prefixplete = new Prefixplete(this.$el.firstElementChild, 
+            "https://ontologies.farewellutopia.com/sparql", 
+            "https://ontologies.farewellutopia.com/");
     const self = this;
     this.prefixplete.action = function() {
       self.$emit("prefixpleteinput", self.prefixplete.value);

@@ -15,7 +15,7 @@
     "@types/vue2-editor": "^2.6.0",
     "core-js": "^3.4.4",
     "oidc-client": "^1.10.1",
-    "prefixplete": "^1.1.2",
+    "prefixplete": "^1.2.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.3.0",
