@@ -2,10 +2,12 @@
   "name": "rdfjs-vue",
   "version": "0.1.0",
   "private": true,
+  "main": "dist/rdfsVue.umd.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "components": "vue-cli-service build --target lib --name rdfjsVue ./src/main.ts"
   },
   "dependencies": {
     "@rdfjs/data-model": "^1.1.2",
