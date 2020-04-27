@@ -7,7 +7,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "components": "vue-cli-service build --target lib --name rdfjsVue ./src/main.ts"
+    "components": "vue-cli-service build --target lib --name rdfjsVue ./src/components.ts"
   },
   "dependencies": {
     "@rdfjs/data-model": "^1.1.2",
