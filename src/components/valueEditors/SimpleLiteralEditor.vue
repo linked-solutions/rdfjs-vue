@@ -23,7 +23,7 @@ export default Vue.extend({
                 this.value.language
             ) : Factory.literal(
                 content,
-                "http://www.w3.org/2001/XMLSchema#string"
+                Factory.namedNode("http://www.w3.org/2001/XMLSchema#string")
             ));
       } 
     },
@@ -37,7 +37,7 @@ export default Vue.extend({
                 lang
             ) : Factory.literal(
                 this.value.value,
-                "http://www.w3.org/2001/XMLSchema#string"
+                Factory.namedNode("http://www.w3.org/2001/XMLSchema#string")
             ));
       } 
     }

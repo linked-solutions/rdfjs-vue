@@ -20,7 +20,7 @@ export default Vue.extend({
     fireEvents: function(content:any) {
       this.$emit("input", Factory.literal(
         content,
-        "http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML"
+        Factory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML")
       ));
     }
   },
