@@ -53,13 +53,13 @@ select {
 
   &.icon {
     width: 26px;
+    min-width: 26px;
     padding: 0;
-    border: none;
     background-color: #ffffff00;
     
     &>* {
-      width: 26px;
-      height: 26px;
+      width: 1rem;
+      height: 1rem;
       margin: auto;
     }
   }

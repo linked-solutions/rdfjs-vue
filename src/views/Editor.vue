@@ -1,13 +1,15 @@
 <template>
   <form class="card" id="va">
-    <div class="flexrow">
-      <label for="s_input">Resource:</label>
-      <term-editor id="s_input" v-model="s" term-types="['BlankNode', 'NamedNode']" />
-    </div>
+    <label for="s_input">Resource:</label>
+    <term-editor class="flexrow" id="s_input" v-model="s" term-types="['BlankNode', 'NamedNode']" />
     <div class="flexrow" v-for="(entry, no) in entries" v-bind:key="entry.id">
         <named-node-editor v-model="entry.p" />
         <term-editor v-model="entry.o" />
-        <button type="button" @click="entries.splice(no, 1)">X</button>
+        <button class="icon" type="button" @click="entries.splice(no, 1)">
+          <svg viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+          </svg>
+        </button>
     </div>
     <button type="button" @click="addRow">Add</button>
     <button type="button" id="submit" @click.prevent="submit()">Submit</button>
@@ -97,8 +99,25 @@ function sendSparqlUpdate(query:string, user:User) {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #va>* {
   margin: 1em 0;
+}
+
+.flexrow {
+  display: flex;
+
+  &>* {
+    flex: 1;
+    margin-left: 1em;
+  }
+
+  &>*:first-child {
+    margin-left: 0;
+  }
+
+  &>button {
+    flex: 0;
+  }
 }
 </style>

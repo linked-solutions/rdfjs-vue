@@ -1,5 +1,5 @@
 <template>
-  <div style="display:flex;flex-shrink:0;">
+  <div>
     <button class="icon">
       <img src="images/subj-expand.svg" title="show properties" @click.prevent="setSubject()" />
     </button>
@@ -9,7 +9,15 @@
   </div>
 </template>
 
-
+<style scoped>
+div {
+  display: flex;
+  flex-shrink: 0;
+}
+button {
+  margin-left: .4em;
+}
+</style>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";

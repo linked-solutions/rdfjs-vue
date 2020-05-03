@@ -6,7 +6,7 @@
     </select>
     <span v-else>
         <button type="button" class="icon" @click="reset()">
-            <svg style="width:1em;height:1em" viewBox="0 0 24 24">
+            <svg viewBox="0 0 24 24">
                 <path fill="currentColor" d="M12,6L7,11H17L12,6M7,13L12,18L17,13H7Z" />
             </svg>
         </button>
