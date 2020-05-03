@@ -96,3 +96,9 @@ function sendSparqlUpdate(query:string, user:User) {
     });
 }
 </script>
+
+<style scoped>
+#va>* {
+  margin: 1em 0;
+}
+</style>

@@ -56,6 +56,6 @@ input {
 }
 input.language {
   flex-grow: 0;
-  width: 3ch;
+  width: 4ch;
 }
 </style>

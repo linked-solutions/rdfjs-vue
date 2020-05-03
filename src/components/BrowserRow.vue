@@ -5,17 +5,36 @@
 
 <template>
   <div class="g">
-    <term-editor v-if="!fixedSubject" v-model="subject" term-types="['BlankNode', 'NamedNode']" />
-    <resource-navigator v-if="!fixedSubject && subject && (subject.termType !== 'Literal')" :resource="subject" 
-    @subject="setSubject($event)" @object="setObject($event)"/>
+    <label v-if="labels && !fixedSubject">Subject:</label>
+    <div class="i" v-if="!fixedSubject">
+      <term-editor
+        v-model="subject"
+        term-types="['BlankNode', 'NamedNode']"
+      />
+      <resource-navigator
+        v-if="subject && (subject.termType !== 'Literal')"
+        :resource="subject"
+        @subject="setSubject($event)"
+        @object="setObject($event)"/>
+    </div>
+
+    <label v-if="labels">Predicate:</label>
     <existing-term-editor v-model="predicate" term-types="['NamedNode']" />
-    <term-editor
-      v-if="!fixedObject"
-      v-model="object"
-      term-types="['BlankNode', 'NamedNode', 'Literal']"
-    />
-    <resource-navigator v-if="!fixedObject && object && (object.termType !== 'Literal')" :resource="object" 
-    @subject="setSubject($event)" @object="setObject($event)"/>
+
+    <label v-if="labels && !fixedObject">Object:</label>
+    <div class="i" v-if="!fixedObject">
+      <term-editor
+        v-model="object"
+        term-types="['BlankNode', 'NamedNode', 'Literal']"
+      />
+      <resource-navigator
+        v-if="object && (object.termType !== 'Literal')"
+        :resource="object" 
+        @subject="setSubject($event)"
+        @object="setObject($event)"
+      />
+    </div>
+
     <term-editor
       v-if="!fixedGraph"
       v-model="graph"
@@ -27,11 +46,22 @@
 <style lang="scss" scoped>
 .g {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
   grid-gap: 0 1em;
   gap: 0 1em;
+  align-items: start;
 }
+
+.i {
+  display: flex;
+  align-items: center;
+
+  .te {
+    flex-grow: 1;
+  }
+}
+
 :not(label) {
   grid-row-start: 2;
 }
@@ -78,6 +108,7 @@ export default class BrowserRow extends Vue {
   @Prop() private fixedSubject: RDF.Quad_Subject | undefined;
   @Prop() private fixedObject: RDF.Quad_Object | undefined;
   @Prop() private fixedGraph: RDF.Quad_Graph | undefined;
+  @Prop() private labels!: Boolean;
 
   subject: RDF.Quad_Subject | null = this.value
     ? this.value.subject

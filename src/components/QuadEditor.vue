@@ -1,9 +1,7 @@
 <template>
   <div class="g">
-    <span class="subject">
     <label v-if="labels">Subject:</label>
     <term-editor v-model="subject" term-types="['BlankNode', 'NamedNode']" />
-    </span>
     <label v-if="labels">Predicate:</label>
     <existing-term-editor v-model="predicate" term-types="['NamedNode']" />
     <label v-if="labels">Object:</label>
@@ -20,6 +18,7 @@
   grid-template-rows: auto;
   grid-gap: 0 1em;
   gap: 0 1em;
+  align-items: start;
 }
 :not(label) {
   grid-row-start: 2;

@@ -7,7 +7,7 @@
       @subject="setSubject($event)" @object="setObject($event)"/>
     </span>
     <div v-if="addedQuad">
-      <browser-row v-model="newQuad" :fixedSubject="_subject" :fixedGraph="_graph" :fixedObject="_object" />
+      <browser-row v-model="newQuad" :fixedSubject="_subject" :fixedGraph="_graph" :fixedObject="_object"/>
     </div>
     <div v-else>
       <button @click="addQuad()">Add attribute</button>

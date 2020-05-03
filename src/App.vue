@@ -11,7 +11,7 @@
     </div>
 </template>
 
-<style>
+<style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
 }
@@ -33,6 +33,36 @@
 
 * {
   box-sizing: border-box;
+}
+
+button,
+input,
+select {
+  padding: 2px 5px;
+  border: 1px solid #bdbdbd;
+  margin: 0;
+  font-size: 1rem;
+  border-radius: .4rem;
+  height: 28px;
+  display: block;
+
+  svg,
+  img {
+    display: block;
+  }
+
+  &.icon {
+    width: 26px;
+    padding: 0;
+    border: none;
+    background-color: #ffffff00;
+    
+    &>* {
+      width: 26px;
+      height: 26px;
+      margin: auto;
+    }
+  }
 }
 </style>
 

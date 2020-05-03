@@ -1,27 +1,56 @@
 <template>
-  <div :key="type">
+  <div class="te" :key="type">
     <select v-if="!value" v-model="type" v-on:change="typeSelected($event)">
       <option disabled :value="null">Select type</option>
       <option v-for="(val, option) in options" v-bind:key="option">{{option}}</option>
     </select>
     <span v-else>
-        <button type="button" @click="reset()">X</button>
+        <button type="button" class="icon" @click="reset()">
+            <svg style="width:1em;height:1em" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12,6L7,11H17L12,6M7,13L12,18L17,13H7Z" />
+            </svg>
+        </button>
         <existing-term-editor v-if="value !== null" v-bind:value="value" v-on:input="propagate($event)"/>
     </span>
   </div>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style scoped>
 select {
     width: 100%;
-}
-button  {
-    height: fit-content;
 }
 span {
     display: flex;
     flex-direction: row;
+}
+</style>
+
+<style lang="scss">
+.te {
+    border: 1px solid #bdbdbd;
+    border-radius: .4rem;
+    min-height: 28px;
+
+    * {
+        margin: 0;
+        border: none;
+    }
+
+    button,
+    input,
+    select {
+        border: none;
+        border-radius: calc(.4rem - 1px);
+        height: 26px;
+        min-height: 26px;
+    }
+
+    input {
+        border-left: 1px solid #bdbdbd;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
 }
 </style>
 

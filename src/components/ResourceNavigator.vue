@@ -1,8 +1,12 @@
 <template>
-  <span>
-    <img src="images/subj-expand.svg" title="show properties" @click="setSubject()" />
-    <img src="images/obj-expand.svg" title="show incoming" @click="setObject()"/>
-  </span>
+  <div style="display:flex;flex-shrink:0;">
+    <button class="icon">
+      <img src="images/subj-expand.svg" title="show properties" @click.prevent="setSubject()" />
+    </button>
+    <button class="icon">
+      <img src="images/obj-expand.svg" title="show incoming" @click.prevent="setObject()"/>
+    </button>
+  </div>
 </template>
 
 
