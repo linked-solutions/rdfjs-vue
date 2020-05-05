@@ -19,6 +19,7 @@
   grid-gap: 0 1em;
   gap: 0 1em;
   align-items: start;
+  margin-bottom: .8rem;
 }
 :not(label) {
   grid-row-start: 2;
