@@ -50,18 +50,43 @@ select {
   img {
     display: block;
   }
+}
 
-  &.icon {
-    width: 26px;
-    min-width: 26px;
-    padding: 0;
-    background-color: #ffffff00;
-    
-    &>* {
-      width: 1rem;
-      height: 1rem;
-      margin: auto;
-    }
+.icon {
+  flex-grow: 0 !important;
+  min-width: 26px;
+  // padding: 0;
+  background-color: #ffffff00;
+  
+  &>* {
+    width: 1rem;
+    height: 1rem;
+    margin: auto;
+  }
+}
+
+.te {
+  border: 1px solid #bdbdbd;
+  border-radius: .4rem;
+  min-height: 28px;
+
+  * {
+    border: none;
+  }
+
+  button,
+  input,
+  select {
+    border: none;
+    border-radius: calc(.4rem - 1px);
+    height: 26px;
+    min-height: 26px;
+  }
+
+  input {
+    border-left: 1px solid #bdbdbd;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 }
 </style>

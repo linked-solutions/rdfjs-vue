@@ -5,6 +5,7 @@
         <blank-node-editor v-else-if="type ==='BlankNode'" v-bind:value="value" v-on:input="propagate($event)"/>
         <simple-literal-editor v-else-if="type ==='label' || type ==='langString'" v-bind:value="value" 
             v-on:input="propagate($event)"/>
+        <input disabled v-else-if="type ==='DefaultGraph'" value="Default Graph"/>
         <div v-else>No value editor for {{ type }}</div>
   </div>
 </template>
