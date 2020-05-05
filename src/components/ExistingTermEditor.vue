@@ -64,4 +64,7 @@ export default Vue.extend({
     flex: 1;
     display: flex;
 }
+input {
+    flex: 1;
+}
 </style>
