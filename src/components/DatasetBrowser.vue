@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="_subject">{{_subject.value}}</div>
-    <div v-if="_object">&lt;-{{_object.value}}</div>
+    <div v-if="_object" style="text-align: end;">&lt;-{{_object.value}}</div>
     <span v-for="t in orderedQuads" :key="t.id">
       <browser-row v-model="t.quad" :fixedSubject="_subject" :fixedGraph="_graph" :fixedObject="_object"
       @subject="setSubject($event)" @object="setObject($event)"/>
