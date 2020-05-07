@@ -53,7 +53,7 @@ export default class DatasetBrowser extends DatasetEditor {
   @Prop() object: RDF.Quad_Object|undefined;
   objectFilter: RDF.Quad_Object|null = null;
   @Prop() graph: RDF.Quad_Graph|undefined;
-  graphFilter: RDF.Quad_Graph|undefined;
+  graphFilter: RDF.Quad_Graph|null = null;
 
   uuid!: string;
 
