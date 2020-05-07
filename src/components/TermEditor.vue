@@ -66,7 +66,7 @@ export default class TermEditor extends Vue {
     options!: OptionList;
     type!: null | string;
 
-    mounted () {
+    created () {
         const options:OptionList  = { 
                 'html': Factory.literal('',Factory.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML')),
                 'label': Factory.literal(''),
@@ -75,8 +75,8 @@ export default class TermEditor extends Vue {
                 'Blank Node': Factory.blankNode(),
                 'DefaultGraph': Factory.defaultGraph(),
             }; 
-        
-        this.options = this.termTypes !== null ? Object.fromEntries(Object.entries(options).filter(([k,n]) => this.termTypes!.indexOf(n.termType) > -1)) : options,
+
+        this.options = this.termTypes ? Object.fromEntries(Object.entries(options).filter(([k,n]) => this.termTypes!.indexOf(n.termType) > -1)) : options,
         this.type = null
     }
 
