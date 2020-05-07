@@ -64,7 +64,7 @@ export default class TermEditor extends Vue {
     @Prop() termTypes!: null | string[];
 
     options!: OptionList;
-    type!: null | string;
+    type: null | string = null;
 
     created () {
         const options:OptionList  = { 
@@ -76,8 +76,9 @@ export default class TermEditor extends Vue {
                 'DefaultGraph': Factory.defaultGraph(),
             }; 
 
-        this.options = this.termTypes ? Object.fromEntries(Object.entries(options).filter(([k,n]) => this.termTypes!.indexOf(n.termType) > -1)) : options,
-        this.type = null
+        this.options = this.termTypes ? Object.fromEntries(Object.entries(options).filter(([k,n]) => this.termTypes!.indexOf(n.termType) > -1)) : options;
+        //this.type = null
+        console.log("this.type: ",this.type);
     }
 
     get compType () {
@@ -102,11 +103,20 @@ export default class TermEditor extends Vue {
         this.$emit('input', event);
     }
 
+    previousValues = new Map();
+
     typeSelected (event:any) {
         console.log("this.termTypes: ",this.termTypes);
         console.log("typeSelected: ",event);
         console.log("this.type: ",this.type);
-        if (this.type !== null) {
+        if (!this.type) {
+            return;
+        }
+        const previousValue = this.previousValues.get(this.type);
+        if (previousValue && previousValue.value.length > 0 
+                && window.confirm("Restoring previous value")) { 
+                this.$emit('input',previousValue);
+        } else {
             console.log("maps to: ",this.options[(this.type)]);
             this.$emit('input',(this.options[this.type]));
         }
@@ -114,7 +124,9 @@ export default class TermEditor extends Vue {
 
     reset () {
         console.log("this.termTypes: ",this.termTypes);
-        console.log('resetting editor', this.value); 
+        console.log('resetting editor', this.value);
+        console.log("this.type: ",this.type);
+        this.previousValues.set(this.compType, this.value);
         this.type = null;
         this.$emit('input', null);
     }
