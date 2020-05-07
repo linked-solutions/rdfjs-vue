@@ -1,7 +1,13 @@
 <template>
   <div>
-    <div v-if="_subject">{{_subject.value}}</div>
-    <div v-if="_object" style="text-align: end;">&lt;-{{_object.value}}</div>
+    <h2 v-if="_subject">
+      {{_subject.value}}
+      <img src="images/subj-expand.svg" title="(Subject)" />
+    </h2>
+    <h2 v-if="_object" style="text-align: end;">
+      <img src="images/obj-expand.svg" title="Object:" />
+      {{_object.value}}
+    </h2>
     <span v-for="t in orderedQuads" :key="t.id">
       <browser-row v-model="t.quad" :fixedSubject="_subject" :fixedGraph="_graph" :fixedObject="_object"
       @subject="setSubject($event)" @object="setObject($event)"/>
@@ -14,6 +20,18 @@
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+h2 {
+  font-size: 1.5rem;
+
+  img {
+    height: 1em;
+    margin-bottom: -3px;
+  }
+}
+</style>
+
 <script lang="ts">
 import { Component, Prop, PropSync, Vue } from "vue-property-decorator";
 import * as Factory from "@rdfjs/data-model";
