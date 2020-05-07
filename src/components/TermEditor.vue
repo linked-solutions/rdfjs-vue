@@ -12,7 +12,7 @@
             <svg v-if="compType === 'html'" viewBox="0 0 24 24">
                 <path d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z"/>
             </svg>
-            <svg v-if="compType === 'label' || type === 'langString'" viewBox="0 0 24 24">
+            <svg v-if="compType === 'label' || type === 'langString' || type === 'literal'" viewBox="0 0 24 24">
                 <path d="M21,6V8H3V6H21M3,18H12V16H3V18M3,13H21V11H3V13Z"/>
             </svg>
             <svg v-if="compType === 'IRI'" viewBox="0 0 24 24">
@@ -52,11 +52,21 @@ import * as Factory from '@rdfjs/data-model';
 import * as RDF from "rdf-js";
 import ExistingTermEditor from './ExistingTermEditor.vue';
 
+interface OptionList {[propName: string]: RDF.Term};
 
-export default Vue.extend({
-    data: function() {
-        const self = this;
-        interface OptionList {[propName: string]: RDF.Term};
+@Component({
+    components: {
+        ExistingTermEditor
+    }
+})
+export default class TermEditor extends Vue {
+    @Prop() value!: null | RDF.Term;
+    @Prop() termTypes!: null | string[];
+
+    options!: OptionList;
+    type!: null | string;
+
+    mounted () {
         const options:OptionList  = { 
                 'html': Factory.literal('',Factory.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML')),
                 'label': Factory.literal(''),
@@ -65,56 +75,48 @@ export default Vue.extend({
                 'Blank Node': Factory.blankNode(),
                 'DefaultGraph': Factory.defaultGraph(),
             }; 
-        return {
-            options: this.termTypes ? Object.fromEntries(Object.entries(options).filter(([k,n]) => this.termTypes.indexOf(n.termType) > -1)) : options,
-            type:  null as (string | null)
-        };
-    },
-    computed: {
-        compType: function() {
-            const types: { [key: string]: string } = {
-                "http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML": "html",
-                "http://www.w3.org/2001/XMLSchema#string": "label",
-                "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString": "langString"
-            };
-            return (this.value.termType === "Literal" ? 
-                        types[this.value.datatype.value] ? types[this.value.datatype.value] : "literal"
-                    : this.value.termType === "NamedNode" ? "IRI" 
-                    : this.value.termType === "DefaultGraph" ? "DefaultGraph"
-                    : "BlankNode");
-        }
-    },
-    methods: {
-        propagate: function(event:any) {
-            //console.log("e: ",event);
-            this.$emit('input', event);
-        },
-        typeSelected: function(event:any) {
-            console.log("this.termTypes: ",this.termTypes);
-            console.log("typeSelected: ",event);
-            console.log("this.type: ",this.type);
-            if (this.type !== null) {
-                console.log("maps to: ",this.options[(this.type)]);
-                this.$emit('input',(this.options[this.type]));
-            }
-        },
-        reset: function() {
-            console.log("this.termTypes: ",this.termTypes);
-            console.log('resetting editor', this.value); 
-            this.type = null;
-            this.$emit('input', null);
-        }
         
-    },
-    props: ["value", "termTypes"],/*{
-        "value": {
-            validator: function (value:any) {
-                return value.termType;
-            }
-        }
-    },*/
-    components: {
-        ExistingTermEditor
+        this.options = this.termTypes !== null ? Object.fromEntries(Object.entries(options).filter(([k,n]) => this.termTypes!.indexOf(n.termType) > -1)) : options,
+        this.type = null
     }
-});
+
+    get compType () {
+        const types: { [key: string]: string } = {
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML": "html",
+            "http://www.w3.org/2001/XMLSchema#string": "label",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString": "langString"
+        };
+        return (
+            this.value !== null ?
+                this.value.termType === "Literal" ? 
+                    types[this.value.datatype.value] ?
+                        types[this.value.datatype.value] : "literal"
+                : this.value.termType === "NamedNode" ? "IRI" 
+                : this.value.termType === "DefaultGraph" ? "DefaultGraph"
+                : "BlankNode"
+                : null );
+    }
+
+    propagate (event:any) {
+        //console.log("e: ",event);
+        this.$emit('input', event);
+    }
+
+    typeSelected (event:any) {
+        console.log("this.termTypes: ",this.termTypes);
+        console.log("typeSelected: ",event);
+        console.log("this.type: ",this.type);
+        if (this.type !== null) {
+            console.log("maps to: ",this.options[(this.type)]);
+            this.$emit('input',(this.options[this.type]));
+        }
+    }
+
+    reset () {
+        console.log("this.termTypes: ",this.termTypes);
+        console.log('resetting editor', this.value); 
+        this.type = null;
+        this.$emit('input', null);
+    }
+}
 </script>
