@@ -1,19 +1,19 @@
 <template>
   <div>
-    <h2 v-if="_subject">
-      {{_subject.value}}
+    <h2 v-if="subjectFilter">
+      {{subjectFilter.value}}
       <img src="images/subj-expand.svg" title="(Subject)" />
     </h2>
-    <h2 v-if="_object" style="text-align: end;">
+    <h2 v-if="objectFilter" style="text-align: end;">
       <img src="images/obj-expand.svg" title="Object:" />
-      {{_object.value}}
+      {{objectFilter.value}}
     </h2>
     <span v-for="t in orderedQuads" :key="t.id">
-      <browser-row v-model="t.quad" :fixedSubject="_subject" :fixedGraph="_graph" :fixedObject="_object"
+      <browser-row v-model="t.quad" :fixedSubject="subjectFilter" :fixedGraph="graphFilter" :fixedObject="objectFilter"
       @subject="setSubject($event)" @object="setObject($event)"/>
     </span>
     <div v-if="addedQuad">
-      <browser-row v-model="newQuad" :fixedSubject="_subject" :fixedGraph="_graph" :fixedObject="_object"/>
+      <browser-row v-model="newQuad" :fixedSubject="subjectFilter" :fixedGraph="graphFilter" :fixedObject="objectFilter"/>
     </div>
     <div v-else>
       <button @click="addQuad()">Add attribute</button>
@@ -49,11 +49,11 @@ let instanceCounter = 0;
 export default class DatasetBrowser extends DatasetEditor {
   @Prop() value!: RDF.DatasetCore;
   @Prop() subject: RDF.Quad_Subject|undefined;
-  _subject: RDF.Quad_Subject|undefined;
+  subjectFilter: RDF.Quad_Subject|null = null;
   @Prop() object: RDF.Quad_Object|undefined;
-  _object: RDF.Quad_Object|undefined;
+  objectFilter: RDF.Quad_Object|null = null;
   @Prop() graph: RDF.Quad_Graph|undefined;
-  _graph: RDF.Quad_Graph|undefined;
+  graphFilter: RDF.Quad_Graph|undefined;
 
   uuid!: string;
 
@@ -66,45 +66,45 @@ export default class DatasetBrowser extends DatasetEditor {
     if (this.subject) {
       if (!this.subject.termType) {
         //we assume it's a string
-        this._subject = Factory.namedNode(this.subject);
+        this.subjectFilter = Factory.namedNode(this.subject);
       } else {
-        this._subject = this.subject;
+        this.subjectFilter = this.subject;
       }
     }
     if (this.object) {
       if (!this.object.termType) {
         //we assume it's a string
-        this._object = Factory.namedNode(this.object);
+        this.objectFilter = Factory.namedNode(this.object);
       } else {
-        this._object = this.object;
+        this.objectFilter = this.object;
       }
     }
     if (this.graph) {
       if (!this.graph.termType) {
         //we assume it's a string
-        this._graph = Factory.namedNode(this.graph);
+        this.graphFilter = Factory.namedNode(this.graph);
       } else {
-        this._graph = this.graph;
+        this.graphFilter = this.graph;
       }
     }
   }
 
   get orderedQuads() {
-    const result = this.orderQuads(this.value.match(this._subject, undefined, this._object, this._graph));
+    const result = this.orderQuads(this.value.match(this.subjectFilter, undefined, this.objectFilter, this.graphFilter));
     return result;
   }
 
   setSubject(subject: RDF.Quad_Subject) {
-    this._object = undefined;
-    this._subject = subject;
+    this.objectFilter = null;
+    this.subjectFilter = subject;
     //enforces update, this.$forceUpdate() didn't refresh quads
     this.$emit("input", Dataset.dataset(this.value));
   }
 
   setObject(object: RDF.Quad_Subject) {
     console.log("setobj"+object);
-    this._object = object;
-    this._subject = undefined;
+    this.objectFilter = object;
+    this.subjectFilter = null;
     //enforces update, this.$forceUpdate() didn't refresh quads
     this.$emit("input", Dataset.dataset(this.value));
   }
