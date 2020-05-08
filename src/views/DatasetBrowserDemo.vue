@@ -1,20 +1,29 @@
 <template>
   <div class="home">
-    <h1>Browse</h1>
-    <p>The <code>DatasetBrowser</code> component allows to browse through resources in a Dataset by following properties in both 
-      directions.</p>
-    <p>The following instance is created with the following code in the template of this page</p>
+    <div class="info">
+      <h1>Browse</h1>
+      <p>
+        The <code>DatasetBrowser</code> component allows to browse through resources in a Dataset by following properties in both 
+        directions.
+      </p>
+      <p>
+        The following instance is created with the following code in the template of this page
+      </p>
       <code>
-      &lt;dataset-browser v-model="ds" subject="http://example.org/Bill" :graph="defaultGraph" />
-    </code>
-    <p>By setting the <code>graph</code> attribute the component 
-    only shows triples from the <em>Default Graph</em>.
+        &lt;dataset-browser v-model="ds" subject="http://example.org/Bill" :graph="defaultGraph" />
+      </code>
+      <p>
+        By setting the <code>graph</code> attribute the component only shows triples from the <em>Default Graph</em>.
+      </p>
+    </div>
     <dataset-browser v-model="ds" subject="http://example.org/Bill" :graph="defaultGraph" />
-    <p>The following instance shows triples from all graphs.
+    <p class="info">The following instance shows triples from all graphs.</p>
     <dataset-browser v-model="ds" subject="http://example.org/Bill" />
-    <h1>Full Dataset</h1>
-    <p>The <code>DatasetEditor</code> component allows to edit all 
-    the quads in a Dataset.</p>
+    <div class="info">
+      <h1>Full Dataset</h1>
+      <p>The <code>DatasetEditor</code> component allows to edit all 
+      the quads in a Dataset.</p>
+    </div>
     <dataset-editor v-model="ds" />
   </div>
 </template>

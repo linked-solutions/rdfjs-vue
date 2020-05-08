@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <h2>TermEditor with different RDF Terms</h2>
+    <div class="info">
+      <h2>TermEditor with different RDF Terms</h2>
+    </div>
     <div v-for="(i,no) in values" v-bind:key="no">
       <hr>
       <term-editor v-model="i.value"/>
@@ -23,21 +25,30 @@
       </span>
     </div>
     <hr>
-    <h2>QuadEditor</h2>
-    <pre>{{ quad ? quad : " no valid quad " }}</pre>
+    <div class="info">
+      <h2>QuadEditor</h2>
+      <p>
+        <code>Quad</code> or <code>" no valid quad "</code>:
+      </p>
+      <pre>{{ quad ? quad : " no valid quad " }}</pre>
+    </div>
     <quad-editor v-model="quad" />
-    <hr>
-    <h3>The same with labels</h3>
+    <p class="info">The same with labels</p>
     <quad-editor :labels="true" v-model="quad" />
     <hr>
-    <h3>This quad is initially null</h3>
-    <pre>{{ quaddeux ? quaddeux : " no valid quad (yet) " }}</pre>
+    <div class="info">
+      <h3>This quad is initially null</h3>
+      <pre>{{ quaddeux ? quaddeux : " no valid quad " }}</pre>
+    </div>
     <quad-editor :labels="true" v-model="quaddeux" />
     <hr>
-    <h2>DataSetEditor</h2>
+    <div class="info">
+      <h2>DatasetEditor</h2>
+    </div>
     <dataset-editor v-model="ds"/>
-     <hr>
-    <h2>DataSetBrowser</h2>
+    <div class="info">
+      <h2>DatasetBrowser</h2>
+    </div>
     <dataset-browser v-model="ds" subject="http://example.org/Bill" />
   </div>
 </template>

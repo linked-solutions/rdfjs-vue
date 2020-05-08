@@ -13,6 +13,7 @@
 <style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-size: 16px;
 }
 
 #nav {
@@ -34,10 +35,32 @@
   box-sizing: border-box;
 }
 
+hr {
+  border: none;
+  border-top: 1px solid #FFE0B2;
+  margin: 1rem 0;
+}
+
+.info {
+  background: #FFF3E0;
+  border-radius: .4rem;
+  padding: .4rem;
+  margin: 1rem 0;
+  border: 1px solid #FFE0B2;
+  line-height: 1.4rem;
+
+  & p:first-child {
+    margin-top: 0;
+  }
+  & p:last-child {
+    margin-bottom: 0;
+  }
+}
+
 button,
 input,
 select {
-  padding: 2px 5px;
+  padding: .1rem .4rem;
   border: 1px solid #bdbdbd;
   margin: 0;
   font-size: 1rem;
