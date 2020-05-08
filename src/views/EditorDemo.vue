@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <h2>TermEditor with different RDF Terms</h2>
     <div v-for="(i,no) in values" v-bind:key="no">
       <hr>
       <term-editor v-model="i.value"/>
@@ -22,16 +23,22 @@
       </span>
     </div>
     <hr>
+    <h2>QuadEditor</h2>
     <pre>{{ quad ? quad : " no valid quad " }}</pre>
     <quad-editor v-model="quad" />
     <hr>
+    <h3>The same with labels</h3>
     <quad-editor :labels="true" v-model="quad" />
     <hr>
-    <pre>{{ quaddeux ? quaddeux : " no valid quad " }}</pre>
+    <h3>This quad is initially null</h3>
+    <pre>{{ quaddeux ? quaddeux : " no valid quad (yet) " }}</pre>
     <quad-editor :labels="true" v-model="quaddeux" />
     <hr>
-    <pre>{{ ds }}</pre>
+    <h2>DataSetEditor</h2>
     <dataset-editor v-model="ds"/>
+     <hr>
+    <h2>DataSetBrowser</h2>
+    <dataset-browser v-model="ds" subject="http://example.org/Bill" />
   </div>
 </template>
 
@@ -40,6 +47,7 @@
 import TermEditor from '@/components/TermEditor.vue'
 import QuadEditor from '@/components/QuadEditor.vue'
 import DatasetEditor from '@/components/DatasetEditor.vue'
+import DatasetBrowser from '@/components/DatasetBrowser.vue'
 import {NamedNode,Literal,BlankNode} from "rdf-js";
 import * as Factory from '@rdfjs/data-model';
 import * as Dataset from "@rdfjs/dataset";
@@ -54,7 +62,8 @@ export default {
   components: {
     TermEditor,
     QuadEditor,
-    DatasetEditor
+    DatasetEditor,
+    DatasetBrowser
   },
   data: function() {
       let v:(NamedNode | Literal | BlankNode | null) = Factory.literal("<h1>Hello</h1>", "http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML");

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Editor from '../views/Editor.vue'
+import Home from '../views/Home.vue'
 import EditorDemo from '../views/EditorDemo.vue'
 import DatasetEditorDemo from '../views/DatasetEditorDemo.vue'
 import DatasetBrowserDemo from '../views/DatasetBrowserDemo.vue'
@@ -11,8 +11,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'editor',
-    component: Editor
+    name: 'home',
+    component: Home
   },
   {
     path: '/dataset-browser-demo',
