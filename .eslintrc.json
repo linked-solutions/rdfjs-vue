@@ -1,8 +1,16 @@
 {
+    "plugins": [
+        "vue"
+    ],
+    "env": {
+        "es6": true,
+        "node": true
+    },
     "rules": {
         "no-unused-vars": 0
     },
     "parserOptions": {
         "sourceType": "module"
-    }
+    },
+    "extends": ["plugin:vue/base"]
 }
