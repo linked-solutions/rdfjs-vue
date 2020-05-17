@@ -10,7 +10,8 @@
         "no-unused-vars": 0
     },
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "parser": "@typescript-eslint/parser"
     },
     "extends": ["plugin:vue/base"]
 }
